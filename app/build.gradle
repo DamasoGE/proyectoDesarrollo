@@ -1,0 +1,41 @@
+plugins {
+  id 'application'
+  id 'org.openjfx.javafxplugin' version '0.1.0' //Plugin que ayuda a construir proyectos JAVAFX
+}
+
+repositories {
+	mavenCentral()
+}
+
+javafx {
+    version = "25"
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    //No es necesario incluir las dependencias porque ya lo hace el plugin por nosotros
+}
+
+java { //Se indica la versión de JDK que ha de utilizar
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+}
+
+application { //Definimos clase principal del proyecto
+    mainClass = 'proyectoDesarrollo.PlantillaFX'
+}
+
+sourceSets {
+  main {
+    resources {
+        srcDirs = ["src/main/resources"]
+        includes = ["**/*.fxml"]  //Importante para poder abrir una extensión no reconocida
+    }
+  }
+}
+
+
+
+
+
