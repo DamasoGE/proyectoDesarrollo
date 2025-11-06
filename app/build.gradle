@@ -13,7 +13,7 @@ javafx {
 }
 
 dependencies {
-    //No es necesario incluir las dependencias porque ya lo hace el plugin por nosotros
+  implementation("com.mysql:mysql-connector-j:9.5.0")
 }
 
 java { //Se indica la versión de JDK que ha de utilizar
@@ -24,17 +24,23 @@ java { //Se indica la versión de JDK que ha de utilizar
 
 application { //Definimos clase principal del proyecto
     mainClass = 'proyectoDesarrollo.PlantillaFX'
+    applicationDefaultJvmArgs = ["--enable-native-access=javafx.graphics"]
 }
 
 sourceSets {
   main {
     resources {
         srcDirs = ["src/main/resources"]
-        includes = ["**/*.fxml"]  //Importante para poder abrir una extensión no reconocida
+        includes = ["**/*.fxml", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif"]
     }
   }
 }
 
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 
 

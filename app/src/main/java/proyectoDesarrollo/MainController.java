@@ -1,27 +1,52 @@
 package proyectoDesarrollo;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import java.io.IOException;
 
 public class MainController {
 
     @FXML
-    private Label labelSaludo;
+    private VBox sidebarContainer;
 
     @FXML
-    void handleBotonClick(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Mensaje");
-        alert.setHeaderText("Información");
-        alert.setContentText("¡Has pulsado el botón!");
-        alert.showAndWait();
-    }
+    private StackPane contentContainer;
 
     @FXML
-    void handleBotonClick2(ActionEvent event) {
-
+    public void initialize() {
+        loadSidebar();
+        loadLoginView();
     }
 
+    /**
+     * Carga la vista del login en el centro
+     */
+    private void loadLoginView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoginView.fxml"));
+            Parent loginView = loader.load(); // Parent funciona para cualquier nodo raíz
+            contentContainer.getChildren().clear();
+            contentContainer.getChildren().add(loginView);
+            contentContainer.setAlignment(Pos.CENTER);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Carga el contenido del sidebar
+     */
+    private void loadSidebar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SidebarGuestView.fxml"));
+            Parent sidebar = loader.load();
+            sidebarContainer.getChildren().add(sidebar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

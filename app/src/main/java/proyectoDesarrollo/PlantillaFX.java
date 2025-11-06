@@ -15,7 +15,7 @@ public class PlantillaFX extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
         Parent root = loader.load(); // aquí se instancia MainController automáticamente
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Mi Aplicación JavaFX");
+        primaryStage.setTitle("Eventik");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
