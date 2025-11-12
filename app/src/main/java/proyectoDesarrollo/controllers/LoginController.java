@@ -4,11 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import proyectoDesarrollo.models.User;
 import proyectoDesarrollo.services.DatabaseService;
+import proyectoDesarrollo.utils.AppState;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -34,25 +33,18 @@ public class LoginController {
 
         try {
             // Obtener conexión singleton
-            Connection conn = DatabaseService.getInstance().getConnection();
+        DatabaseService db = DatabaseService.getInstance();
+        User user = db.login(username, password);
 
-            // Consulta segura
-            String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                System.out.println("Login correcto!");
-            } else {
-                System.out.println("Usuario o contraseña incorrectos");
-            }
-
-            rs.close();
-            stmt.close();
-
+        if (user != null) {
+            System.out.println("Login correcto!");
+            AppState state = AppState.getInstance();
+            state.setLoggedIn(true);
+            state.setUsername(user.getName());
+            state.setRole(user.getRole());
+        } else {
+            System.out.println("Usuario o contraseña incorrectos");
+        }
         } catch (SQLException e) {
             e.printStackTrace();
         }

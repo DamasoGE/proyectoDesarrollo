@@ -28,12 +28,12 @@
                   <Image url="@images/default_user.png" />
                </image>
             </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="user">
+            <Text fx:id="labelUser" strokeType="OUTSIDE" strokeWidth="0.0" text="user">
                <font>
                   <Font size="34.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="user.role">
+            <Text fx:id="labelRole" strokeType="OUTSIDE" strokeWidth="0.0" text="user.role">
                <font>
                   <Font size="20.0" />
                </font>
