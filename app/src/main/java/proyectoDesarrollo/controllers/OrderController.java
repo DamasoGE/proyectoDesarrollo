@@ -1,10 +1,16 @@
 package proyectoDesarrollo.controllers;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -13,7 +19,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import proyectoDesarrollo.models.Order;
+import proyectoDesarrollo.models.User;
 import proyectoDesarrollo.services.DatabaseService;
 
 public class OrderController {
@@ -105,16 +115,38 @@ public class OrderController {
     }
 
     private void loadOrders() {
-        DatabaseService dbService;
         try {
-            dbService = DatabaseService.getInstance();
-            ObservableList<Order> orders = dbService.getAllOrders();
-            orderTable.setItems(orders);
-        } catch (Exception e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/LoadingView.fxml"));
+            Parent loadingRoot = loader.load();
+
+            Stage loadingStage = new Stage();
+            loadingStage.initModality(Modality.APPLICATION_MODAL);
+            loadingStage.setScene(new Scene(loadingRoot));
+            loadingStage.getIcons().add(
+                    new Image(getClass().getResourceAsStream("/images/icon.png")));
+            loadingStage.setTitle("Cargando...");
+            loadingStage.show();
+
+            new Thread(() -> {
+                try {
+                    DatabaseService db = DatabaseService.getInstance();
+                    ObservableList<Order> orders = db.getAllOrders();
+
+                    Platform.runLater(() -> {
+                        orderTable.setItems(orders);
+                        loadingStage.close();
+                    });
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    Platform.runLater(loadingStage::close);
+                }
+            }).start();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     void buttonDeleteOnAction(ActionEvent event) {

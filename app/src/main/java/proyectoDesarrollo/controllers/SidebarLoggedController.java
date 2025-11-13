@@ -34,6 +34,9 @@ public class SidebarLoggedController {
     @FXML
     private Button servicesButton;
 
+        @FXML
+    private Button profileButton;
+
     @FXML
     private Button usersButton;
 
@@ -106,4 +109,14 @@ public class SidebarLoggedController {
         }
     }
 
+    @FXML
+    void profileButtonOnAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileView.fxml"));
+            Node usersContent = loader.load();
+            mainController.setRightContent(usersContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

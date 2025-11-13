@@ -4,11 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PlantillaFX extends Application {
+public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -17,6 +18,8 @@ public class PlantillaFX extends Application {
         Scene scene = new Scene(root);
         primaryStage.setTitle("Eventik");
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(
+                new Image(getClass().getResourceAsStream("/images/icon.png")));
         primaryStage.show();
     }
 
