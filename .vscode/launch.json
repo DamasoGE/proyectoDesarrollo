@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "proyectoDesarrollo.Main",
+            "vmArgs": "--module-path C:\\javafx-sdk-25\\lib --add-modules javafx.base,javafx.controls,javafx.swing,javafx.fxml,javafx.media,javafx.web --enable-native-access=javafx.graphics",
+            "projectName": "app"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "vmArgs": "--module-path C:\\javafx-sdk-25\\lib --add-modules javafx.base,javafx.controls,javafx.swing,javafx.fxml,javafx.media,javafx.web --enable-native-access=javafx.graphics"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+
+
+<BorderPane fx:id="mainContainer" prefWidth="1280" prefHeight="720"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="proyectoDesarrollo.MainController">
+
+    <!-- Sidebar fija a la izquierda -->
+    <left>
+        <VBox fx:id="sidebarContainer" prefWidth="280" style="-fx-background-color: #ccc;" />
+    </left>
+
+    <!-- Zona central para las vistas -->
+<center>
+    <StackPane fx:id="contentContainer" style="-fx-background-color: #ddd;" />
+</center>
+
+</BorderPane>
