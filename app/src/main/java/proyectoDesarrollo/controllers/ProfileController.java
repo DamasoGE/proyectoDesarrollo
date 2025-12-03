@@ -81,7 +81,6 @@ public class ProfileController {
         String newPassword = newPasswordInput.getText().trim();
         String confirmPassword = confirmNewPasswordInput.getText().trim();
 
-        // Detectar si hay nueva imagen
 
         boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername())) // username
                                                                                                         // cambiado
@@ -143,25 +142,21 @@ public class ProfileController {
             updatedUser.setImage(base64image);
         }
 
-        // Actualizar en base de datos
         if (!newPassword.isEmpty()) {
-            // Sí hay nueva contraseña → actualiza username + password
             UserController.updateUserWithPassword(updatedUser, newPassword);
         } else {
-            // NO hay nueva contraseña → actualizar solo otros campos
             UserController.updateUser(updatedUser);
         }
 
-        // Actualizar AppState para que el sidebar se entere
         appState.setCurrentUser(updatedUser);
 
         labelUser.setText(updatedUser.getUsername());
-        // Limpiar campos
+
         passwordInput.clear();
         newPasswordInput.clear();
         confirmNewPasswordInput.clear();
+        base64image = null;
 
-        // Alert de éxito
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
                 javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle("Profile Updated");
