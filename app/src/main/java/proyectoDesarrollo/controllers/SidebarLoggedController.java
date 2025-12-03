@@ -8,12 +8,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.MainController;
 import proyectoDesarrollo.utils.AppState;
+import proyectoDesarrollo.utils.ImageToText;
 
 public class SidebarLoggedController {
 
@@ -40,6 +43,9 @@ public class SidebarLoggedController {
     @FXML
     private Button usersButton;
 
+    @FXML
+    private ImageView imageViewUser;
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -52,6 +58,19 @@ public class SidebarLoggedController {
             if (newUser != null) {
                 labelUser.setText(newUser.getUsername());
                 labelRole.setText(newUser.getRole());
+
+                String photoBase64 = newUser.getImage();
+
+                if (photoBase64 != null && !photoBase64.isBlank()) {
+                    try {
+                        Image fxImage = ImageToText.base64ToFxImage(photoBase64);
+                        imageViewUser.setImage(fxImage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    imageViewUser.setImage(null);
+                }
             } else {
                 labelUser.setText("");
                 labelRole.setText("");
@@ -62,6 +81,13 @@ public class SidebarLoggedController {
         if (state.getCurrentUser() != null) {
             labelUser.setText(state.getCurrentUser().getUsername());
             labelRole.setText(state.getCurrentUser().getRole());
+
+            try {
+                imageViewUser.setImage(ImageToText.base64ToFxImage(state.getCurrentUser().getImage()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else {
             labelUser.setText("");
             labelRole.setText("");

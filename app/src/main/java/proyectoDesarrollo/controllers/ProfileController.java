@@ -1,5 +1,6 @@
 package proyectoDesarrollo.controllers;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -10,13 +11,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.interfaz.controllers.UserController;
 import proyectoDesarrollo.models.User;
 import proyectoDesarrollo.utils.AppState;
+import proyectoDesarrollo.utils.ImageToText;
 
 public class ProfileController {
 
@@ -50,11 +54,19 @@ public class ProfileController {
     @FXML
     private TextField usernameInput;
 
+    private String base64image;
+
     @FXML
     private void initialize() {
         AppState appState = AppState.getInstance();
         labelUser.setText(appState.getCurrentUser().getUsername());
         labelRole.setText(appState.getCurrentUser().getRole());
+
+            try {
+                imageViewProfile.setImage(ImageToText.base64ToFxImage(appState.getCurrentUser().getImage()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     @FXML
@@ -69,8 +81,13 @@ public class ProfileController {
         String newPassword = newPasswordInput.getText().trim();
         String confirmPassword = confirmNewPasswordInput.getText().trim();
 
-        boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername()))
-                || (!newPassword.isEmpty());
+        // Detectar si hay nueva imagen
+
+        boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername())) // username
+                                                                                                        // cambiado
+                || (!newPassword.isEmpty()) // password cambiado
+                || (base64image != null && !base64image.isEmpty()
+                        && !base64image.equals(currentUser.getImage())); // imagen cambiada
 
         if (!hasChanges) {
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
@@ -122,8 +139,18 @@ public class ProfileController {
             return;
         }
 
+        if (!base64image.isEmpty()) {
+            updatedUser.setImage(base64image);
+        }
+
         // Actualizar en base de datos
-        UserController.updateUserWithPassword(updatedUser,newPassword);
+        if (!newPassword.isEmpty()) {
+            // Sí hay nueva contraseña → actualiza username + password
+            UserController.updateUserWithPassword(updatedUser, newPassword);
+        } else {
+            // NO hay nueva contraseña → actualizar solo otros campos
+            UserController.updateUser(updatedUser);
+        }
 
         // Actualizar AppState para que el sidebar se entere
         appState.setCurrentUser(updatedUser);
@@ -145,7 +172,31 @@ public class ProfileController {
 
     @FXML
     void imageButtonOnAction(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
 
+        File selectedFile = fileChooser.showOpenDialog(imageButton.getScene().getWindow());
+        if (selectedFile == null)
+            return;
+
+        try {
+            // Convertir imagen a base64
+            base64image = ImageToText.imageFileToBase64(selectedFile);
+
+            // Mostrar imagen en el ImageView
+            Image image = ImageToText.base64ToFxImage(base64image);
+            imageViewProfile.setImage(image);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Image Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Error loading or converting the selected image.");
+            alert.showAndWait();
+        }
     }
 
     @FXML
