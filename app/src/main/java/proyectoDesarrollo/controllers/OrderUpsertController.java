@@ -35,6 +35,10 @@ public class OrderUpsertController {
     @FXML
     private TextField locationInput;
     @FXML
+    private Spinner<Integer> hourInput;
+    @FXML
+    private Spinner<Integer> minuteInput;
+    @FXML
     private TextField notesInput;
     @FXML
     private Spinner<Integer> participantsInput;
@@ -59,11 +63,17 @@ public class OrderUpsertController {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
         participantsInput.setEditable(true);
 
+        // Spinner para hora y minuto
+        hourInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+        hourInput.setEditable(true);
+
+        minuteInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        minuteInput.setEditable(true);
+
         // Status
         statusChoiceBox.getItems().addAll("pending", "confirmed", "canceled", "completed");
 
         if (order != null) {
-            // UPDATE
             titleUpsertText.setText("UPDATE ORDER: " + order.getId());
 
             notesInput.setText(order.getNotes());
@@ -80,31 +90,38 @@ public class OrderUpsertController {
             }
 
             if (order.getAppointment() != null) {
-                appointmentInput.setValue(order.getAppointment().toLocalDate());
+                LocalDate date = order.getAppointment().toLocalDateTime().toLocalDate();
+                appointmentInput.setValue(date);
+
+                hourInput.getValueFactory().setValue(order.getAppointment().toLocalDateTime().getHour());
+                minuteInput.getValueFactory().setValue(order.getAppointment().toLocalDateTime().getMinute());
             }
 
-            // User
             if (order.getCustomerName() != null) {
                 textCustomer.setText(order.getCustomerName());
-            } else {
+            } else if (order.getCustomerId() != null) {
                 textCustomer.setText("User ID: " + order.getCustomerId());
+            } else {
+                textCustomer.setText("No user selected");
             }
 
-            // Service
             if (order.getServiceName() != null) {
                 textService.setText(order.getServiceName());
-            } else {
+            } else if (order.getServiceId() != null) {
                 textService.setText("Service ID: " + order.getServiceId());
+            } else {
+                textService.setText("No service selected");
             }
 
             button.setText("UPDATE");
 
         } else {
-            // CREATE
             titleUpsertText.setText("CREATE ORDER");
 
             statusChoiceBox.setValue("pending");
             participantsInput.getValueFactory().setValue(1);
+            hourInput.getValueFactory().setValue(12);
+            minuteInput.getValueFactory().setValue(0);
 
             textCustomer.setText("No user selected");
             textService.setText("No service selected");
@@ -185,7 +202,12 @@ public class OrderUpsertController {
         order.setStatus(statusChoiceBox.getValue());
 
         LocalDate date = appointmentInput.getValue();
-        order.setAppointment(Date.valueOf(date));
+        Integer hour = hourInput.getValue();
+        Integer minute = minuteInput.getValue();
+
+        if (date != null && hour != null && minute != null) {
+            order.setAppointment(java.sql.Timestamp.valueOf(date.atTime(hour, minute)));
+        }
 
         // SAVE or UPDATE
         if (order.getId() == null) {

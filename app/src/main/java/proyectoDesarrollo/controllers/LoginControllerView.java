@@ -1,16 +1,22 @@
 package proyectoDesarrollo.controllers;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import proyectoDesarrollo.interfaz.controllers.AuthController;
 import proyectoDesarrollo.models.User;
 import proyectoDesarrollo.utils.AppState;
@@ -18,6 +24,9 @@ import proyectoDesarrollo.utils.AppState;
 import java.io.IOException;
 
 public class LoginControllerView {
+
+    @FXML
+    private Button loginButton;
 
     @FXML
     private ImageView loginImage;
@@ -30,12 +39,13 @@ public class LoginControllerView {
 
     @FXML
     private void initialize() {
+        Platform.runLater(() -> playFadeAndScale(loginImage));
         usernameField.setOnAction(event -> tryLogin());
         passwordField.setOnAction(event -> tryLogin());
     }
 
     @FXML
-    void buttonLogin(ActionEvent event) {
+    void loginButtonOnAction(ActionEvent event) {
         tryLogin();
     }
 
@@ -84,5 +94,20 @@ public class LoginControllerView {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void playFadeAndScale(Node node) {
+        FadeTransition fade = new FadeTransition(Duration.millis(750), node);
+        fade.setFromValue(0);
+        fade.setToValue(1);
+
+        ScaleTransition scale = new ScaleTransition(Duration.millis(750), node);
+        scale.setFromX(0.8);
+        scale.setFromY(0.8);
+        scale.setToX(1);
+        scale.setToY(1);
+
+        ParallelTransition animation = new ParallelTransition(fade, scale);
+        animation.play();
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.interfaz.controllers.ServiceController;
@@ -28,6 +28,7 @@ public class ServiceControllerView {
     }
 
     private Mode mode = Mode.DEFAULT;
+    private ObservableList<Service> allServices = FXCollections.observableArrayList();
 
     public void setMode(Mode mode) {
         this.mode = mode;
@@ -52,6 +53,8 @@ public class ServiceControllerView {
     @FXML
     private Button buttonDelete, buttonFilter, buttonUpdate, buttonNew, selectButton;
     @FXML
+    private Button clearFilterButton;
+    @FXML
     private TableView<Service> serviceTable;
     @FXML
     private TableColumn<Service, Boolean> activeColumn;
@@ -70,11 +73,9 @@ public class ServiceControllerView {
     @FXML
     private Spinner<Integer> durationMaxInput, durationMinInput, maxParticipantsMinInput, maxParticipantsMaxInput;
     @FXML
-    private TextField nameInput, priceMinInput, priceMaxInput;
+    private TextField nameInput, minPriceInput, maxPriceInput;
     @FXML
     private RadioButton radioButtonBoth, radioButtonNo, radioButtonYes;
-    @FXML
-    private Text titleUpsertText;
 
     public void initialize() {
         AppState appState = AppState.getInstance();
@@ -82,7 +83,7 @@ public class ServiceControllerView {
 
         selectButton.setFocusTraversable(false);
 
-        // Columns
+        // Configuración de columnas
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -91,6 +92,7 @@ public class ServiceControllerView {
         maxParticipantsColumn.setCellValueFactory(new PropertyValueFactory<>("maxParticipants"));
         activeColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().isActive()));
 
+        // Configurar spinners
         durationMinInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1440, 0));
         durationMaxInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1440, 60));
         maxParticipantsMinInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
@@ -161,8 +163,10 @@ public class ServiceControllerView {
             new Thread(() -> {
                 try {
                     ObservableList<Service> services = ServiceController.getAllServices();
+                    allServices = FXCollections.observableArrayList(services); // guardar copia completa
+
                     Platform.runLater(() -> {
-                        serviceTable.setItems(services);
+                        serviceTable.setItems(allServices);
                         loadingStage.close();
                     });
                 } catch (Exception e) {
@@ -174,6 +178,53 @@ public class ServiceControllerView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void buttonFilterOnAction(ActionEvent event) {
+        if (allServices == null)
+            return; // Asegurarse de que hay servicios cargados
+
+        ObservableList<Service> filtered = allServices.filtered(s -> {
+            // Nombre
+            String name = nameInput.getText().toLowerCase().trim();
+
+            // Precio mínimo y máximo
+            double min = 0, max = Double.MAX_VALUE;
+            try {
+                min = !minPriceInput.getText().isEmpty() ? Double.parseDouble(minPriceInput.getText()) : 0;
+                max = !maxPriceInput.getText().isEmpty() ? Double.parseDouble(maxPriceInput.getText())
+                        : Double.MAX_VALUE;
+            } catch (NumberFormatException ignored) {
+            }
+
+            // Duración
+            int durationMin = durationMinInput.getValue();
+            int durationMax = durationMaxInput.getValue();
+
+            // Máximo de participantes
+            int maxPartMin = maxParticipantsMinInput.getValue();
+            int maxPartMax = maxParticipantsMaxInput.getValue();
+
+            // Filtro de activo
+            Toggle selectedToggle = activeToggleGroup.getSelectedToggle();
+            Boolean activeFilter = null;
+            if (selectedToggle == radioButtonYes)
+                activeFilter = true;
+            else if (selectedToggle == radioButtonNo)
+                activeFilter = false;
+
+            // Comprobaciones de coincidencia
+            boolean matchesName = name.isEmpty() || s.getName().toLowerCase().contains(name);
+            boolean matchesPrice = s.getPrice() >= min && s.getPrice() <= max;
+            boolean matchesDuration = s.getDuration() >= durationMin && s.getDuration() <= durationMax;
+            boolean matchesParticipants = s.getMaxParticipants() >= maxPartMin && s.getMaxParticipants() <= maxPartMax;
+            boolean matchesActive = (activeFilter == null) || s.isActive() == activeFilter;
+
+            return matchesName && matchesPrice && matchesDuration && matchesParticipants && matchesActive;
+        });
+
+        serviceTable.setItems(filtered);
     }
 
     @FXML
@@ -202,10 +253,6 @@ public class ServiceControllerView {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    void buttonFilterOnAction(ActionEvent event) {
     }
 
     @FXML
@@ -248,4 +295,21 @@ public class ServiceControllerView {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    void clearFilterButtonOnAction(ActionEvent event) {
+        nameInput.clear();
+        minPriceInput.clear();
+        maxPriceInput.clear();
+
+        durationMinInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1440, 0));
+        durationMaxInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1440, 60));
+        maxParticipantsMinInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
+        maxParticipantsMaxInput.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+
+        radioButtonBoth.setSelected(true);
+
+        serviceTable.setItems(allServices);
+    }
+
 }

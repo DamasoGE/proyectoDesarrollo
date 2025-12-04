@@ -1,9 +1,13 @@
 package proyectoDesarrollo.controllers;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,51 +25,79 @@ import proyectoDesarrollo.utils.AppState;
 
 public class OrderControllerView {
 
-    @FXML private DatePicker appointmentMaxInput;
-    @FXML private DatePicker appointmentMinInput;
+    private ObservableList<Order> allOrders;
 
-    @FXML private Button buttonDelete;
-    @FXML private Button buttonFilter;
-    @FXML private Button buttonNew;
-    @FXML private Button buttonUpdate;
+    @FXML
+    private DatePicker appointmentMaxInput;
+    @FXML
+    private DatePicker appointmentMinInput;
 
-    @FXML private TextField customerUsernameInput;
-    @FXML private TextField locationInput;
+    @FXML
+    private Button buttonDelete;
+    @FXML
+    private Button buttonFilter;
+    @FXML
+    private Button buttonNew;
+    @FXML
+    private Button buttonUpdate;
 
-    @FXML private Spinner<Integer> maxParticipantsMaxInput;
-    @FXML private Spinner<Integer> maxParticipantsaMinInput;
+    @FXML
+    private Button clearFilterButton;
+    @FXML
+    private TextField customerUsernameInput;
+    @FXML
+    private TextField locationInput;
 
-    @FXML private TextField maxPriceInput;
-    @FXML private TextField minPriceInput;
+    @FXML
+    private Spinner<Integer> maxParticipantsMaxInput;
+    @FXML
+    private Spinner<Integer> maxParticipantsaMinInput;
 
-    @FXML private TextField serviceNameInput;
+    @FXML
+    private TextField maxPriceInput;
+    @FXML
+    private TextField minPriceInput;
 
-    @FXML private TableColumn<Order, String> statusColumn;
-    @FXML private TableColumn<Order, LocalDateTime> appointmentColumn;
-    @FXML private TableColumn<Order, String> customerIdColumn;
-    @FXML private TableColumn<Order, String> idColumn;
-    @FXML private TableColumn<Order, String> locationColumn;
-    @FXML private TableColumn<Order, String> notesColumn;
-    @FXML private TableColumn<Order, Integer> participantsColumn;
-    @FXML private TableColumn<Order, Integer> priceFinalColumn;
-    @FXML private TableColumn<Order, String> serviceIdColumn;
-    @FXML private TableColumn<Order, String> customerColumn;
-    @FXML private TableColumn<Order, String> serviceColumn;
+    @FXML
+    private TextField serviceNameInput;
 
-    @FXML private TableView<Order> orderTable;
-    @FXML private ChoiceBox<String> statusBox;
+    @FXML
+    private TableColumn<Order, String> statusColumn;
+    @FXML
+    private TableColumn<Order, Timestamp> appointmentColumn;
+    @FXML
+    private TableColumn<Order, String> customerIdColumn;
+    @FXML
+    private TableColumn<Order, String> idColumn;
+    @FXML
+    private TableColumn<Order, String> locationColumn;
+    @FXML
+    private TableColumn<Order, String> notesColumn;
+    @FXML
+    private TableColumn<Order, Integer> participantsColumn;
+    @FXML
+    private TableColumn<Order, Integer> priceFinalColumn;
+    @FXML
+    private TableColumn<Order, String> serviceIdColumn;
+    @FXML
+    private TableColumn<Order, String> customerColumn;
+    @FXML
+    private TableColumn<Order, String> serviceColumn;
+
+    @FXML
+    private TableView<Order> orderTable;
+    @FXML
+    private ChoiceBox<String> statusBox;
 
     @FXML
     public void initialize() {
 
         // Spinners
         maxParticipantsaMinInput.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 0)
-        );
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 0));
 
         maxParticipantsMaxInput.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 100)
-        );
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 100));
 
         maxParticipantsaMinInput.setEditable(true);
         maxParticipantsMaxInput.setEditable(true);
@@ -140,21 +172,109 @@ public class OrderControllerView {
             Stage loadingStage = new Stage();
             loadingStage.initModality(Modality.APPLICATION_MODAL);
             loadingStage.setScene(new Scene(loadingRoot));
-            loadingStage.getIcons().add(
-                    new Image(getClass().getResourceAsStream("/images/icon.png")));
+            loadingStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
             loadingStage.setTitle("Loading...");
             loadingStage.show();
 
             new Thread(() -> {
                 ObservableList<Order> orders = OrderController.getAllOrders();
+                allOrders = FXCollections.observableArrayList(orders); // Guardamos la lista completa
                 Platform.runLater(() -> {
-                    orderTable.setItems(orders);
+                    orderTable.setItems(allOrders);
                     loadingStage.close();
                 });
             }).start();
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+void buttonFilterOnAction(ActionEvent event) {
+    if (allOrders == null)
+        return;
+
+    ObservableList<Order> filtered = allOrders.filtered(order -> {
+
+        String serviceName = serviceNameInput.getText().toLowerCase().trim();
+        String customerUsername = customerUsernameInput.getText().toLowerCase().trim();
+        String location = locationInput.getText().toLowerCase().trim();
+        String minPriceText = minPriceInput.getText().trim();
+        String maxPriceText = maxPriceInput.getText().trim();
+        String status = statusBox.getValue();
+
+        Integer minPrice = null;
+        Integer maxPrice = null;
+
+        try {
+            minPrice = minPriceText.isEmpty() ? null : Integer.parseInt(minPriceText);
+        } catch (NumberFormatException ignored) {}
+        try {
+            maxPrice = maxPriceText.isEmpty() ? null : Integer.parseInt(maxPriceText);
+        } catch (NumberFormatException ignored) {}
+
+        // Filtrado de fechas con Timestamp
+        Timestamp minDate = null;
+        Timestamp maxDate = null;
+
+        LocalDate minLocal = appointmentMinInput.getValue();
+        LocalDate maxLocal = appointmentMaxInput.getValue();
+
+        if (minLocal != null) {
+            minDate = Timestamp.valueOf(minLocal.atStartOfDay()); // inicio del día
+        }
+        if (maxLocal != null) {
+            maxDate = Timestamp.valueOf(maxLocal.atTime(23, 59, 59)); // fin del día
+        }
+
+        int minParticipants = maxParticipantsaMinInput.getValue();
+        int maxParticipants = maxParticipantsMaxInput.getValue();
+
+        boolean matchesService = serviceName.isEmpty()
+                || order.getServiceName().toLowerCase().contains(serviceName);
+        boolean matchesCustomer = customerUsername.isEmpty()
+                || order.getCustomerName().toLowerCase().contains(customerUsername);
+        boolean matchesLocation = location.isEmpty() || order.getLocation().toLowerCase().contains(location);
+
+        boolean matchesPrice = true;
+        if (minPrice != null) matchesPrice = order.getPriceFinal() >= minPrice;
+        if (maxPrice != null) matchesPrice &= order.getPriceFinal() <= maxPrice;
+
+        boolean matchesStatus = status == null || status.isEmpty() || order.getStatus().equalsIgnoreCase(status);
+
+        boolean matchesDate = true;
+        if (minDate != null) matchesDate = !order.getAppointment().before(minDate);
+        if (maxDate != null) matchesDate &= !order.getAppointment().after(maxDate);
+
+        boolean matchesParticipants = order.getParticipants() >= minParticipants
+                && order.getParticipants() <= maxParticipants;
+
+        return matchesService && matchesCustomer && matchesLocation &&
+                matchesPrice && matchesStatus && matchesDate && matchesParticipants;
+    });
+
+    orderTable.setItems(filtered);
+}
+
+    @FXML
+    void clearFilterButtonOnAction(ActionEvent event) {
+        serviceNameInput.clear();
+        customerUsernameInput.clear();
+        locationInput.clear();
+        minPriceInput.clear();
+        maxPriceInput.clear();
+        statusBox.setValue(null);
+        appointmentMinInput.setValue(null);
+        appointmentMaxInput.setValue(null);
+        maxParticipantsaMinInput.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 0));
+
+        maxParticipantsMaxInput.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 100));
+
+        if (allOrders != null) {
+            orderTable.setItems(allOrders);
         }
     }
 
@@ -178,7 +298,8 @@ public class OrderControllerView {
     private void handleDelete() {
         Order selected = orderTable.getSelectionModel().getSelectedItem();
 
-        if (selected == null) return;
+        if (selected == null)
+            return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Order");
@@ -191,11 +312,6 @@ public class OrderControllerView {
                 loadOrders();
             }
         });
-    }
-
-    @FXML
-    void buttonFilterOnAction(ActionEvent event) {
-
     }
 
     private void openModal(String fxmlPath, String title) {

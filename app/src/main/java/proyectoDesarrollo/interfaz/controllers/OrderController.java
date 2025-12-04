@@ -34,7 +34,7 @@ public class OrderController {
                 Order order = new Order(
                         rs.getString("customerId"),
                         rs.getString("serviceId"),
-                        rs.getDate("appointment"),
+                        rs.getTimestamp("appointment"),
                         rs.getString("status"),
                         rs.getString("notes"),
                         rs.getDouble("priceFinal"),
@@ -72,7 +72,7 @@ public class OrderController {
 
             stmt.setString(1, order.getCustomerId());
             stmt.setString(2, order.getServiceId());
-            stmt.setDate(3, order.getAppointment());
+            stmt.setTimestamp(3, order.getAppointment());
             stmt.setString(4, order.getStatus());
             stmt.setString(5, order.getNotes());
             stmt.setDouble(6, order.getPriceFinal());
@@ -99,7 +99,7 @@ public class OrderController {
 
             stmt.setString(1, order.getCustomerId());
             stmt.setString(2, order.getServiceId());
-            stmt.setDate(3, order.getAppointment());
+            stmt.setTimestamp(3, order.getAppointment());
             stmt.setString(4, order.getStatus());
             stmt.setString(5, order.getNotes());
             stmt.setDouble(6, order.getPriceFinal());
@@ -149,7 +149,7 @@ public class OrderController {
                     order = new Order(
                             rs.getString("customerId"),
                             rs.getString("serviceId"),
-                            rs.getDate("appointment"),
+                            rs.getTimestamp("appointment"),
                             rs.getString("status"),
                             rs.getString("notes"),
                             rs.getDouble("priceFinal"),

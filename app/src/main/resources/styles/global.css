@@ -1,0 +1,186 @@
+/* ==========================================================
+   GLOBAL STYLES
+   Estilos base para toda la aplicación JavaFX
+   ========================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", Roboto, Arial;
+    -fx-font-size: 14px;
+    -fx-background-color: #f5f6fa;
+}
+
+/* ----------------------------------------------------------
+   TEXT AND LABELS
+   ---------------------------------------------------------- */
+
+.label {
+    -fx-text-fill: #2d3436;
+}
+
+.title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+/* ==========================================================
+   SECTION TITLES
+   ========================================================== */
+
+.sectionTitle {
+    -fx-font-family: "Segoe Print", "Arial";
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+    -fx-padding: 8 0 8 0;
+}
+
+/* ----------------------------------------------------------
+   BUTTONS
+   ---------------------------------------------------------- */
+
+.button {
+    -fx-border-radius: 8;
+}
+
+
+.loginButton {
+    -fx-background-color: #2F72A9;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-width: 2;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 12 20;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+    -fx-min-height: 40px;
+}
+
+.sectionButton {
+    -fx-cursor: hand;
+}
+
+.sectionButton:hover {
+    -fx-background-color: #f0f4ff;
+    -fx-border-color: "white";
+    -fx-border-width: 2;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+}
+
+
+/* Botón secundario */
+.button.secondary {
+    -fx-background-color: #dfe6e9;
+    -fx-text-fill: #2d3436;
+}
+
+.button.secondary:hover {
+    -fx-background-color: #bfc6c9;
+}
+
+/* ----------------------------------------------------------
+   TEXTFIELDS & PASSWORD FIELDS
+   ---------------------------------------------------------- */
+
+.text-field,
+.password-field {
+    -fx-background-color: white;
+    -fx-border-color: #b2bec3;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+}
+
+.text-field:focused,
+.password-field:focused {
+    -fx-border-color: #2F72A9;
+}
+
+/* ----------------------------------------------------------
+   COMBOBOX
+   ---------------------------------------------------------- */
+
+.combo-box {
+    -fx-background-radius: 6;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 6;
+}
+
+/* ----------------------------------------------------------
+   TABLEVIEW
+   ---------------------------------------------------------- */
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #dfe6e9;
+}
+
+.table-column {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-row-cell {
+    -fx-padding: 6 10;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #2F72A9;
+    -fx-text-fill: white;
+}
+
+/* ----------------------------------------------------------
+   SCROLLPANE
+   ---------------------------------------------------------- */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #b2bec3;
+    -fx-background-radius: 6;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #95a5a6;
+}
+
+/* ----------------------------------------------------------
+   TOOLBAR
+   ---------------------------------------------------------- */
+
+.tool-bar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 8;
+    -fx-border-color: #dfe6e9;
+}
+
+/* ----------------------------------------------------------
+   DIALOGS / MODALS
+   ---------------------------------------------------------- */
+
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.dialog-pane .button {
+    -fx-background-radius: 6;
+}

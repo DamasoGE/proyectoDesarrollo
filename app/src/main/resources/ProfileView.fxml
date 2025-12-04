@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,26 +16,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.PasswordField?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.ProfileController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.ProfileController">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox prefHeight="200.0" prefWidth="602.0">
          <children>
             <HBox alignment="CENTER" prefHeight="55.0" prefWidth="900.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PROFILE PAGE" textAlignment="CENTER" wrappingWidth="420.0">
+                  <Text fill="#2f72a9" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sectionTitle" text="PROFILE PAGE" textAlignment="CENTER" wrappingWidth="420.0">
                      <font>
                         <Font size="25.0" />
                      </font>
                   </Text>
                </children>
             </HBox>
-            <HBox prefHeight="268.0" prefWidth="600.0">
+            <HBox prefHeight="328.0" prefWidth="790.0">
                <children>
-                  <VBox prefHeight="390.0" prefWidth="478.0">
+                  <VBox prefHeight="310.0" prefWidth="580.0">
                      <children>
-                        <GridPane>
+                        <GridPane prefHeight="304.0" prefWidth="504.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="232.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="338.0" minWidth="10.0" prefWidth="232.0" />
@@ -75,14 +76,26 @@
                                  </GridPane.margin>
                               </PasswordField>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm New Password:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmButtonOnAction" text="Confirm Changes" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                              <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#confirmButtonOnAction" style="-fx-background-color: #2F72A9;" text="Confirm Changes" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="9">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CONFIRM CHANGES:" GridPane.rowIndex="7" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Change Profile Image:" GridPane.rowIndex="5" />
-                              <Button fx:id="imageButton" mnemonicParsing="false" onAction="#imageButtonOnAction" text="Select Image" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Button fx:id="imageButton" mnemonicParsing="false" onAction="#imageButtonOnAction" style="-fx-background-color: #2F72A9;" text="Select Image" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
                            </children>
                         </GridPane>
                      </children>
@@ -92,26 +105,41 @@
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="400.0" prefWidth="128.0">
                      <children>
-                        <ImageView fx:id="imageViewProfile" fitHeight="75.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="106.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/default_user.png" />
+                              <Image url="@images/icon.png" />
                            </image>
                         </ImageView>
-                        <Text fx:id="labelUser" strokeType="OUTSIDE" strokeWidth="0.0" text="user" textAlignment="CENTER">
-                           <font>
-                              <Font size="34.0" />
-                           </font>
-                        </Text>
-                        <Text fx:id="labelRole" strokeType="OUTSIDE" strokeWidth="0.0" text="user.role">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <Button fx:id="logoutButton" minWidth="100.0" mnemonicParsing="false" onAction="#logoutButtonOnAction" prefWidth="100.0" text="Log Out">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ImageView fx:id="imageViewProfile" fitHeight="75.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/default_user_profile.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="labelUser" strokeType="OUTSIDE" strokeWidth="0.0" text="user" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="34.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="labelRole" strokeType="OUTSIDE" strokeWidth="0.0" text="user.role">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <Button fx:id="logoutButton" minWidth="100.0" mnemonicParsing="false" onAction="#logoutButtonOnAction" prefWidth="100.0" style="-fx-background-color: #2F72A9;" text="Log Out" textAlignment="CENTER" textFill="WHITE">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
                      <opaqueInsets>
                         <Insets />

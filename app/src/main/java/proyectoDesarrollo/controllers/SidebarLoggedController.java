@@ -1,7 +1,10 @@
 package proyectoDesarrollo.controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -46,11 +50,26 @@ public class SidebarLoggedController {
     @FXML
     private ImageView imageViewUser;
 
+    @FXML
+    private BorderPane sidebarPane;
+
+    private Map<Button, String> buttonColors;
+
+
+    private Button activeButton;
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
     public void initialize() {
+
+        buttonColors = new HashMap<>();
+        buttonColors.put(ordersButton, "#F42E5F");
+        buttonColors.put(servicesButton, "#F1C40F");
+        buttonColors.put(usersButton, "#4E9BAB");
+        buttonColors.put(profileButton, "#2F72A9");
+
         AppState state = AppState.getInstance();
 
         // Suscribirse a cambios del currentUser
@@ -102,19 +121,29 @@ public class SidebarLoggedController {
                 labelRole.setText("");
             }
         });
+
+        setActiveButton(profileButton);
     }
 
     @FXML
     void buttonExitOnAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ConfirmExitView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ConfirmView.fxml"));
             VBox root = loader.load();
+
+            ConfirmController confirmController = loader.getController();
+            confirmController.setMessage("Do you really want to exit?");
 
             Stage modal = new Stage();
             modal.initModality(Modality.APPLICATION_MODAL);
             modal.setTitle("Exit Confirmation");
             modal.setScene(new Scene(root));
             modal.showAndWait();
+
+            if (confirmController.isConfirmed()) {
+
+                Platform.exit();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,6 +158,7 @@ public class SidebarLoggedController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setActiveButton(ordersButton);
     }
 
     @FXML
@@ -140,6 +170,7 @@ public class SidebarLoggedController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setActiveButton(servicesButton);
     }
 
     @FXML
@@ -151,6 +182,7 @@ public class SidebarLoggedController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setActiveButton(usersButton);
     }
 
     @FXML
@@ -162,5 +194,23 @@ public class SidebarLoggedController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setActiveButton(profileButton);
     }
+
+    private void setActiveButton(Button button) {
+        // Limpiar clase de todos los botones
+        ordersButton.getStyleClass().remove("active-button");
+        servicesButton.getStyleClass().remove("active-button");
+        usersButton.getStyleClass().remove("active-button");
+        profileButton.getStyleClass().remove("active-button");
+
+        // Aplicar clase al botón activo
+        button.getStyleClass().add("active-button");
+        activeButton = button;
+
+        // Cambiar color de fondo del sidebar
+        String color = buttonColors.get(button);
+        sidebarPane.setStyle("-fx-background-color: " + color + ";");
+    }
+
 }

@@ -3,6 +3,7 @@ package proyectoDesarrollo.controllers;
 import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,6 +35,9 @@ public class UserControllerView {
 
     private Mode mode = Mode.DEFAULT;
 
+    // LISTA COMPLETA PARA FILTRAR
+    private ObservableList<User> allUsers = FXCollections.observableArrayList();
+
     public void setMode(Mode mode) {
         this.mode = mode;
     }
@@ -54,52 +58,38 @@ public class UserControllerView {
 
     @FXML
     private TableColumn<User, String> addressColumn;
-
     @FXML
     private TextField addressInput;
-
     @FXML
     private Button buttonFilter;
-
     @FXML
     private Button buttonUpdate;
-
     @FXML
     private Button buttonDelete;
-
     @FXML
     private Button buttonNew;
-
+    @FXML
+    private Button clearFilterButton;
     @FXML
     private TableColumn<User, String> emailColumn;
-
     @FXML
     private TextField emailInput;
-
     @FXML
     private TableColumn<User, String> idColumn;
-
     @FXML
     private TableColumn<User, String> nameColumn;
-
     @FXML
     private TextField nameInput;
-
     @FXML
     private TableColumn<User, String> phoneColumn;
-
     @FXML
     private TextField phoneInput;
-
     @FXML
     private TableColumn<User, String> roleColumn;
-
     @FXML
     private TextField roleInput;
-
     @FXML
     private TableView<User> userTable;
-
     @FXML
     private Button selectButton;
 
@@ -112,7 +102,7 @@ public class UserControllerView {
         AppState appState = AppState.getInstance();
         appState.setSelectedUser(null);
 
-        // Table set
+        // Configuración de columnas
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -188,9 +178,10 @@ public class UserControllerView {
             new Thread(() -> {
                 try {
                     ObservableList<User> users = UserController.getAllUsers();
+                    allUsers = FXCollections.observableArrayList(users);
 
                     Platform.runLater(() -> {
-                        userTable.setItems(users);
+                        userTable.setItems(allUsers);
                         loadingStage.close();
                     });
                 } catch (Exception e) {
@@ -206,7 +197,26 @@ public class UserControllerView {
 
     @FXML
     void buttonFilterOnAction(ActionEvent event) {
+        if (allUsers == null)
+            return;
 
+        String name = nameInput.getText().toLowerCase().trim();
+        String email = emailInput.getText().toLowerCase().trim();
+        String role = roleInput.getText().toLowerCase().trim();
+        String phone = phoneInput.getText().toLowerCase().trim();
+        String address = addressInput.getText().toLowerCase().trim();
+
+        ObservableList<User> filtered = allUsers.filtered(user -> {
+            boolean matchesName = name.isEmpty() || user.getUsername().toLowerCase().contains(name);
+            boolean matchesEmail = email.isEmpty() || user.getEmail().toLowerCase().contains(email);
+            boolean matchesRole = role.isEmpty() || user.getRole().toLowerCase().contains(role);
+            boolean matchesPhone = phone.isEmpty() || user.getPhone().toLowerCase().contains(phone);
+            boolean matchesAddress = address.isEmpty() || user.getAddress().toLowerCase().contains(address);
+
+            return matchesName && matchesEmail && matchesRole && matchesPhone && matchesAddress;
+        });
+
+        userTable.setItems(filtered);
     }
 
     @FXML
@@ -229,7 +239,6 @@ public class UserControllerView {
 
     @FXML
     void selectButtonOnAction(ActionEvent event) {
-
         User selectedUser = userTable.getSelectionModel().getSelectedItem();
 
         if (selectedUser == null) {
@@ -241,7 +250,6 @@ public class UserControllerView {
 
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
-
     }
 
     private void openModal(String fxmlPath, String title) {
@@ -251,8 +259,7 @@ public class UserControllerView {
 
             Stage stage = new Stage();
             stage.setTitle(title);
-            stage.getIcons().add(
-                    new Image(getClass().getResourceAsStream("/images/icon.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
@@ -265,27 +272,38 @@ public class UserControllerView {
     }
 
     private void confirmAndDeleteUser(User user) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ConfirmView.fxml"));
-        Parent root = loader.load();
-        ConfirmController controller = loader.getController();
-        controller.setMessage("Do you want to delete " + user.getUsername() + "?");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ConfirmView.fxml"));
+            Parent root = loader.load();
+            ConfirmController controller = loader.getController();
+            controller.setMessage("Do you want to delete " + user.getUsername() + "?");
 
-        Stage stage = new Stage();
-        stage.setTitle("Confirm");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+            Stage stage = new Stage();
+            stage.setTitle("Confirm");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
-        if (controller.isConfirmed()) {
-            UserController.deleteUser(user.getId());
-            loadUsers();
+            if (controller.isConfirmed()) {
+                UserController.deleteUser(user.getId());
+                loadUsers();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
 
+    @FXML
+    void clearFilterButtonOnAction(ActionEvent event) {
+        nameInput.clear();
+        emailInput.clear();
+        roleInput.clear();
+        phoneInput.clear();
+        addressInput.clear();
 
+        if (allUsers != null) {
+            userTable.setItems(allUsers);
+        }
+    }
 }

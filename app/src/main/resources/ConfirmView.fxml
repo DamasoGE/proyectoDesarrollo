@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" spacing="20" style="-fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.ConfirmController">
 
@@ -14,8 +15,14 @@
     <!-- Botones -->
     <HBox alignment="CENTER" spacing="20">
         <children>
-            <Button onAction="#confirmButtonOnAction" prefWidth="80" text="Yes" />
-            <Button fx:id="cancelButton" onAction="#cancelButtonOnAction" prefWidth="80" text="No" />
+            <Button onAction="#confirmButtonOnAction" prefWidth="80" style="-fx-background-color: #2F72A9;" text="Yes" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Button>
+            <Button fx:id="cancelButton" onAction="#cancelButtonOnAction" prefWidth="80" style="-fx-background-color: #2F72A9;" text="No" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="15.0" />
+            </font></Button>
         </children>
     </HBox>
 

@@ -15,7 +15,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
         Parent root = loader.load();
+
         Scene scene = new Scene(root);
+
+        scene.getStylesheets().add(
+                getClass().getResource("/styles/global.css").toString());
+                
         primaryStage.setTitle("Eventik");
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(

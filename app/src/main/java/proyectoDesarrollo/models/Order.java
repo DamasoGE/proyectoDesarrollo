@@ -1,12 +1,12 @@
 package proyectoDesarrollo.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Order {
     private String id;
     private String customerId;
     private String serviceId;
-    private Date appointment;
+    private Timestamp appointment;
     private String status;
     private String notes;
     private Double priceFinal;
@@ -19,7 +19,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(String customerId, String serviceId, Date appointment, String status, String notes,
+    public Order(String customerId, String serviceId, Timestamp appointment, String status, String notes,
             Double priceFinal, int participants, String location) {
         this.customerId = customerId;
         this.serviceId = serviceId;
@@ -55,11 +55,11 @@ public class Order {
         this.serviceId = id;
     }
 
-    public Date getAppointment() {
+    public Timestamp getAppointment() {
         return appointment;
     }
 
-    public void setAppointment(Date appointment) {
+    public void setAppointment(Timestamp appointment) {
         this.appointment = appointment;
     }
 
