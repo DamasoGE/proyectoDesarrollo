@@ -1,7 +1,6 @@
 package proyectoDesarrollo.controllers;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
 
 import javafx.event.ActionEvent;
@@ -216,7 +215,6 @@ public class OrderUpsertController {
             OrderController.updateOrder(order);
         }
 
-        // Limpiar estado
         appState.setSelectedOrder(null);
         appState.setSelectedUser(null);
         appState.setSelectedService(null);

@@ -4,10 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javafx.application.Platform;
@@ -120,7 +118,6 @@ public class OrderControllerView {
         serviceColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
-        // ChoiceBox estado
         statusBox.getItems().addAll("PENDING", "CONFIRMED", "CANCELLED", "COMPLETED");
 
         loadOrders();
@@ -186,7 +183,7 @@ public class OrderControllerView {
 
             new Thread(() -> {
                 ObservableList<Order> orders = OrderController.getAllOrders();
-                allOrders = FXCollections.observableArrayList(orders); // Guardamos la lista completa
+                allOrders = FXCollections.observableArrayList(orders);
                 Platform.runLater(() -> {
                     orderTable.setItems(allOrders);
                     loadingStage.close();
@@ -224,7 +221,6 @@ public class OrderControllerView {
             } catch (NumberFormatException ignored) {
             }
 
-            // Filtrado de fechas con Timestamp
             Timestamp minDate = null;
             Timestamp maxDate = null;
 
@@ -232,10 +228,10 @@ public class OrderControllerView {
             LocalDate maxLocal = appointmentMaxInput.getValue();
 
             if (minLocal != null) {
-                minDate = Timestamp.valueOf(minLocal.atStartOfDay()); // inicio del día
+                minDate = Timestamp.valueOf(minLocal.atStartOfDay());
             }
             if (maxLocal != null) {
-                maxDate = Timestamp.valueOf(maxLocal.atTime(23, 59, 59)); // fin del día
+                maxDate = Timestamp.valueOf(maxLocal.atTime(23, 59, 59));
             }
 
             int minParticipants = maxParticipantsaMinInput.getValue();

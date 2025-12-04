@@ -39,7 +39,6 @@ public class UserControllerView {
 
     private Mode mode = Mode.DEFAULT;
 
-    // LISTA COMPLETA PARA FILTRAR
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     public void setMode(Mode mode) {

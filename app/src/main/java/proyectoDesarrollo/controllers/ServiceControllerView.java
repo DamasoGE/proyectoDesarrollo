@@ -170,7 +170,7 @@ public class ServiceControllerView {
             new Thread(() -> {
                 try {
                     ObservableList<Service> services = ServiceController.getAllServices();
-                    allServices = FXCollections.observableArrayList(services); // guardar copia completa
+                    allServices = FXCollections.observableArrayList(services);
 
                     Platform.runLater(() -> {
                         serviceTable.setItems(allServices);
@@ -190,13 +190,11 @@ public class ServiceControllerView {
     @FXML
     void buttonFilterOnAction(ActionEvent event) {
         if (allServices == null)
-            return; // Asegurarse de que hay servicios cargados
+            return;
 
         ObservableList<Service> filtered = allServices.filtered(s -> {
-            // Nombre
             String name = nameInput.getText().toLowerCase().trim();
 
-            // Precio mínimo y máximo
             double min = 0, max = Double.MAX_VALUE;
             try {
                 min = !minPriceInput.getText().isEmpty() ? Double.parseDouble(minPriceInput.getText()) : 0;
@@ -205,15 +203,12 @@ public class ServiceControllerView {
             } catch (NumberFormatException ignored) {
             }
 
-            // Duración
             int durationMin = durationMinInput.getValue();
             int durationMax = durationMaxInput.getValue();
 
-            // Máximo de participantes
             int maxPartMin = maxParticipantsMinInput.getValue();
             int maxPartMax = maxParticipantsMaxInput.getValue();
 
-            // Filtro de activo
             Toggle selectedToggle = activeToggleGroup.getSelectedToggle();
             Boolean activeFilter = null;
             if (selectedToggle == radioButtonYes)
@@ -221,7 +216,6 @@ public class ServiceControllerView {
             else if (selectedToggle == radioButtonNo)
                 activeFilter = false;
 
-            // Comprobaciones de coincidencia
             boolean matchesName = name.isEmpty() || s.getName().toLowerCase().contains(name);
             boolean matchesPrice = s.getPrice() >= min && s.getPrice() <= max;
             boolean matchesDuration = s.getDuration() >= durationMin && s.getDuration() <= durationMax;

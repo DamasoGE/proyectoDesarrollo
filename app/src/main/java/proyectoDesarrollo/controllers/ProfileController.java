@@ -82,11 +82,10 @@ public class ProfileController {
         String confirmPassword = confirmNewPasswordInput.getText().trim();
 
 
-        boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername())) // username
-                                                                                                        // cambiado
-                || (!newPassword.isEmpty()) // password cambiado
+        boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername()))
+                || (!newPassword.isEmpty())
                 || (base64image != null && !base64image.isEmpty()
-                        && !base64image.equals(currentUser.getImage())); // imagen cambiada
+                        && !base64image.equals(currentUser.getImage()));
 
         if (!hasChanges) {
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
@@ -98,7 +97,6 @@ public class ProfileController {
             return;
         }
 
-        // Validar contraseña actual usando AuthController
         if (!currentPassword.isEmpty() && !proyectoDesarrollo.interfaz.controllers.AuthController
                 .checkPassword(currentUser.getId(), currentPassword)) {
             passwordInput.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -176,10 +174,7 @@ public class ProfileController {
             return;
 
         try {
-            // Convertir imagen a base64
             base64image = ImageToText.imageFileToBase64(selectedFile);
-
-            // Mostrar imagen en el ImageView
             Image image = ImageToText.base64ToFxImage(base64image);
             imageViewProfile.setImage(image);
 

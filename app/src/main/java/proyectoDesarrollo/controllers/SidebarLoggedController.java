@@ -55,7 +55,7 @@ public class SidebarLoggedController {
 
     private Map<Button, String> buttonColors;
 
-
+    @FXML
     private Button activeButton;
 
     public void setMainController(MainController mainController) {
@@ -198,17 +198,14 @@ public class SidebarLoggedController {
     }
 
     private void setActiveButton(Button button) {
-        // Limpiar clase de todos los botones
         ordersButton.getStyleClass().remove("active-button");
         servicesButton.getStyleClass().remove("active-button");
         usersButton.getStyleClass().remove("active-button");
         profileButton.getStyleClass().remove("active-button");
 
-        // Aplicar clase al botón activo
         button.getStyleClass().add("active-button");
         activeButton = button;
 
-        // Cambiar color de fondo del sidebar
         String color = buttonColors.get(button);
         sidebarPane.setStyle("-fx-background-color: " + color + ";");
     }
