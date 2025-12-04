@@ -1,5 +1,8 @@
 package proyectoDesarrollo.controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -14,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.interfaz.controllers.ServiceController;
@@ -118,7 +122,10 @@ public class ServiceControllerView {
         MenuItem deleteItem = new MenuItem("Delete");
         deleteItem.setOnAction(e -> buttonDeleteOnAction(null));
 
-        contextMenu.getItems().addAll(editItem, deleteItem);
+        MenuItem exportItem = new MenuItem("Export to CSV");
+        exportItem.setOnAction(e -> exportTableToCSV());
+
+        contextMenu.getItems().addAll(editItem, deleteItem, exportItem);
 
         serviceTable.setRowFactory(tv -> {
             TableRow<Service> row = new TableRow<>();
@@ -312,4 +319,41 @@ public class ServiceControllerView {
         serviceTable.setItems(allServices);
     }
 
+    private void exportTableToCSV() {
+    if (serviceTable.getItems().isEmpty()) {
+        System.out.println("No hay datos para exportar");
+        return;
+    }
+
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Guardar CSV");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File file = fileChooser.showSaveDialog(serviceTable.getScene().getWindow());
+
+    if (file != null) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Cabecera
+            writer.write("ID,Name,Description,Price,Duration,MaxParticipants,Active");
+            writer.newLine();
+
+            // Filas
+            for (Service service : serviceTable.getItems()) {
+                String line = String.format("%s,%s,%s,%.2f,%d,%d,%s",
+                        service.getId(),
+                        service.getName(),
+                        service.getDescription(),
+                        service.getPrice(),
+                        service.getDuration(),
+                        service.getMaxParticipants(),
+                        service.isActive() ? "Yes" : "No");
+                writer.write(line);
+                writer.newLine();
+            }
+
+            System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
 }

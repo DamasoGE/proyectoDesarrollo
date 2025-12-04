@@ -1,10 +1,14 @@
 package proyectoDesarrollo.controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.interfaz.controllers.OrderController;
@@ -135,7 +140,10 @@ public class OrderControllerView {
         MenuItem deleteItem = new MenuItem("Delete");
         deleteItem.setOnAction(e -> handleDelete());
 
-        contextMenu.getItems().addAll(editItem, deleteItem);
+        MenuItem exportItem = new MenuItem("Export to CSV");
+        exportItem.setOnAction(e -> exportTableToCSV());
+
+        contextMenu.getItems().addAll(editItem, deleteItem, exportItem);
 
         orderTable.setRowFactory(tv -> {
             TableRow<Order> row = new TableRow<>();
@@ -191,71 +199,77 @@ public class OrderControllerView {
     }
 
     @FXML
-void buttonFilterOnAction(ActionEvent event) {
-    if (allOrders == null)
-        return;
+    void buttonFilterOnAction(ActionEvent event) {
+        if (allOrders == null)
+            return;
 
-    ObservableList<Order> filtered = allOrders.filtered(order -> {
+        ObservableList<Order> filtered = allOrders.filtered(order -> {
 
-        String serviceName = serviceNameInput.getText().toLowerCase().trim();
-        String customerUsername = customerUsernameInput.getText().toLowerCase().trim();
-        String location = locationInput.getText().toLowerCase().trim();
-        String minPriceText = minPriceInput.getText().trim();
-        String maxPriceText = maxPriceInput.getText().trim();
-        String status = statusBox.getValue();
+            String serviceName = serviceNameInput.getText().toLowerCase().trim();
+            String customerUsername = customerUsernameInput.getText().toLowerCase().trim();
+            String location = locationInput.getText().toLowerCase().trim();
+            String minPriceText = minPriceInput.getText().trim();
+            String maxPriceText = maxPriceInput.getText().trim();
+            String status = statusBox.getValue();
 
-        Integer minPrice = null;
-        Integer maxPrice = null;
+            Integer minPrice = null;
+            Integer maxPrice = null;
 
-        try {
-            minPrice = minPriceText.isEmpty() ? null : Integer.parseInt(minPriceText);
-        } catch (NumberFormatException ignored) {}
-        try {
-            maxPrice = maxPriceText.isEmpty() ? null : Integer.parseInt(maxPriceText);
-        } catch (NumberFormatException ignored) {}
+            try {
+                minPrice = minPriceText.isEmpty() ? null : Integer.parseInt(minPriceText);
+            } catch (NumberFormatException ignored) {
+            }
+            try {
+                maxPrice = maxPriceText.isEmpty() ? null : Integer.parseInt(maxPriceText);
+            } catch (NumberFormatException ignored) {
+            }
 
-        // Filtrado de fechas con Timestamp
-        Timestamp minDate = null;
-        Timestamp maxDate = null;
+            // Filtrado de fechas con Timestamp
+            Timestamp minDate = null;
+            Timestamp maxDate = null;
 
-        LocalDate minLocal = appointmentMinInput.getValue();
-        LocalDate maxLocal = appointmentMaxInput.getValue();
+            LocalDate minLocal = appointmentMinInput.getValue();
+            LocalDate maxLocal = appointmentMaxInput.getValue();
 
-        if (minLocal != null) {
-            minDate = Timestamp.valueOf(minLocal.atStartOfDay()); // inicio del día
-        }
-        if (maxLocal != null) {
-            maxDate = Timestamp.valueOf(maxLocal.atTime(23, 59, 59)); // fin del día
-        }
+            if (minLocal != null) {
+                minDate = Timestamp.valueOf(minLocal.atStartOfDay()); // inicio del día
+            }
+            if (maxLocal != null) {
+                maxDate = Timestamp.valueOf(maxLocal.atTime(23, 59, 59)); // fin del día
+            }
 
-        int minParticipants = maxParticipantsaMinInput.getValue();
-        int maxParticipants = maxParticipantsMaxInput.getValue();
+            int minParticipants = maxParticipantsaMinInput.getValue();
+            int maxParticipants = maxParticipantsMaxInput.getValue();
 
-        boolean matchesService = serviceName.isEmpty()
-                || order.getServiceName().toLowerCase().contains(serviceName);
-        boolean matchesCustomer = customerUsername.isEmpty()
-                || order.getCustomerName().toLowerCase().contains(customerUsername);
-        boolean matchesLocation = location.isEmpty() || order.getLocation().toLowerCase().contains(location);
+            boolean matchesService = serviceName.isEmpty()
+                    || order.getServiceName().toLowerCase().contains(serviceName);
+            boolean matchesCustomer = customerUsername.isEmpty()
+                    || order.getCustomerName().toLowerCase().contains(customerUsername);
+            boolean matchesLocation = location.isEmpty() || order.getLocation().toLowerCase().contains(location);
 
-        boolean matchesPrice = true;
-        if (minPrice != null) matchesPrice = order.getPriceFinal() >= minPrice;
-        if (maxPrice != null) matchesPrice &= order.getPriceFinal() <= maxPrice;
+            boolean matchesPrice = true;
+            if (minPrice != null)
+                matchesPrice = order.getPriceFinal() >= minPrice;
+            if (maxPrice != null)
+                matchesPrice &= order.getPriceFinal() <= maxPrice;
 
-        boolean matchesStatus = status == null || status.isEmpty() || order.getStatus().equalsIgnoreCase(status);
+            boolean matchesStatus = status == null || status.isEmpty() || order.getStatus().equalsIgnoreCase(status);
 
-        boolean matchesDate = true;
-        if (minDate != null) matchesDate = !order.getAppointment().before(minDate);
-        if (maxDate != null) matchesDate &= !order.getAppointment().after(maxDate);
+            boolean matchesDate = true;
+            if (minDate != null)
+                matchesDate = !order.getAppointment().before(minDate);
+            if (maxDate != null)
+                matchesDate &= !order.getAppointment().after(maxDate);
 
-        boolean matchesParticipants = order.getParticipants() >= minParticipants
-                && order.getParticipants() <= maxParticipants;
+            boolean matchesParticipants = order.getParticipants() >= minParticipants
+                    && order.getParticipants() <= maxParticipants;
 
-        return matchesService && matchesCustomer && matchesLocation &&
-                matchesPrice && matchesStatus && matchesDate && matchesParticipants;
-    });
+            return matchesService && matchesCustomer && matchesLocation &&
+                    matchesPrice && matchesStatus && matchesDate && matchesParticipants;
+        });
 
-    orderTable.setItems(filtered);
-}
+        orderTable.setItems(filtered);
+    }
 
     @FXML
     void clearFilterButtonOnAction(ActionEvent event) {
@@ -329,6 +343,54 @@ void buttonFilterOnAction(ActionEvent event) {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void exportTableToCSV() {
+        if (orderTable.getItems().isEmpty()) {
+            System.out.println("No hay datos para exportar");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(orderTable.getScene().getWindow());
+
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Cabecera
+                writer.write(
+                        "ID,Customer,CustomerId,Service,ServiceId,Appointment,Status,Notes,PriceFinal,Participants,Location");
+                writer.newLine();
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+                // Filas
+                for (Order order : orderTable.getItems()) {
+                    Timestamp ts = order.getAppointment();
+                    String appointmentStr = ts != null ? ts.toLocalDateTime().format(formatter) : "";
+
+                    String line = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%.2f,%d,%s",
+                            order.getId(),
+                            order.getCustomerName(),
+                            order.getCustomerId(),
+                            order.getServiceName(),
+                            order.getServiceId(),
+                            appointmentStr,
+                            order.getStatus(),
+                            order.getNotes() != null ? order.getNotes() : "",
+                            order.getPriceFinal(),
+                            order.getParticipants(),
+                            order.getLocation() != null ? order.getLocation() : "");
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }

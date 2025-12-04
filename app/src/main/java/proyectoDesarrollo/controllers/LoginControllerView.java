@@ -69,8 +69,6 @@ public class LoginControllerView {
                     AppState state = AppState.getInstance();
                     state.setCurrentUser(user);
                     state.setLoggedIn(true);
-                    System.out.println("Usuario: " + user.getUsername());
-                    System.out.println("Rol: " + user.getRole());
                 } else {
                     System.out.println("Usuario o contraseña incorrectos");
                 }

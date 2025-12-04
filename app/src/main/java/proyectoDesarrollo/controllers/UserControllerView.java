@@ -1,5 +1,8 @@
 package proyectoDesarrollo.controllers;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -20,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import proyectoDesarrollo.interfaz.controllers.UserController;
@@ -131,7 +135,10 @@ public class UserControllerView {
             }
         });
 
-        contextMenu.getItems().addAll(editItem, deleteItem);
+        MenuItem exportItem = new MenuItem("Export to CSV");
+        exportItem.setOnAction(e -> exportTableToCSV());
+
+        contextMenu.getItems().addAll(editItem, deleteItem, exportItem);
 
         userTable.setRowFactory(tv -> {
             TableRow<User> row = new TableRow<>();
@@ -306,4 +313,41 @@ public class UserControllerView {
             userTable.setItems(allUsers);
         }
     }
+
+    private void exportTableToCSV() {
+    if (userTable.getItems().isEmpty()) {
+        System.out.println("No hay datos para exportar");
+        return;
+    }
+
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Guardar CSV");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File file = fileChooser.showSaveDialog(userTable.getScene().getWindow());
+
+    if (file != null) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Cabecera
+            writer.write("ID,Username,Email,Role,Phone,Address");
+            writer.newLine();
+
+            // Filas
+            for (User user : userTable.getItems()) {
+                String line = String.format("%s,%s,%s,%s,%s,%s",
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getRole(),
+                        user.getPhone(),
+                        user.getAddress());
+                writer.write(line);
+                writer.newLine();
+            }
+
+            System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
 }
