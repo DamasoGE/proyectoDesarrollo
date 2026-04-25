@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -80,8 +81,24 @@ public class ServiceControllerView {
     private TextField nameInput, minPriceInput, maxPriceInput;
     @FXML
     private RadioButton radioButtonBoth, radioButtonNo, radioButtonYes;
+    @FXML
+    private BorderPane mainPane;
 
     public void initialize() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReportPanel.fxml"));
+            Parent reportPanel = loader.load();
+
+            ReportPanelControllerView controller = loader.getController();
+            controller.setContext(ReportPanelControllerView.ReportContext.SERVICES);
+
+            mainPane.setRight(reportPanel);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         AppState appState = AppState.getInstance();
         appState.setSelectedService(null);
 
@@ -314,40 +331,40 @@ public class ServiceControllerView {
     }
 
     private void exportTableToCSV() {
-    if (serviceTable.getItems().isEmpty()) {
-        System.out.println("No hay datos para exportar");
-        return;
-    }
+        if (serviceTable.getItems().isEmpty()) {
+            System.out.println("No hay datos para exportar");
+            return;
+        }
 
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Guardar CSV");
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-    File file = fileChooser.showSaveDialog(serviceTable.getScene().getWindow());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(serviceTable.getScene().getWindow());
 
-    if (file != null) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            // Cabecera
-            writer.write("ID,Name,Description,Price,Duration,MaxParticipants,Active");
-            writer.newLine();
-
-            // Filas
-            for (Service service : serviceTable.getItems()) {
-                String line = String.format("%s,%s,%s,%.2f,%d,%d,%s",
-                        service.getId(),
-                        service.getName(),
-                        service.getDescription(),
-                        service.getPrice(),
-                        service.getDuration(),
-                        service.getMaxParticipants(),
-                        service.isActive() ? "Yes" : "No");
-                writer.write(line);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Cabecera
+                writer.write("ID,Name,Description,Price,Duration,MaxParticipants,Active");
                 writer.newLine();
-            }
 
-            System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
-        } catch (IOException ex) {
-            ex.printStackTrace();
+                // Filas
+                for (Service service : serviceTable.getItems()) {
+                    String line = String.format("%s,%s,%s,%.2f,%d,%d,%s",
+                            service.getId(),
+                            service.getName(),
+                            service.getDescription(),
+                            service.getPrice(),
+                            service.getDuration(),
+                            service.getMaxParticipants(),
+                            service.isActive() ? "Yes" : "No");
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
 }

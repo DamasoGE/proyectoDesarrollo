@@ -10,39 +10,39 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="621.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.ServiceControllerView">
-   <children>
-   <VBox prefWidth="602.0">
-      <HBox alignment="CENTER" prefHeight="55.0" prefWidth="900.0">
-         <children>
-            <Text fill="#f1c40f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sectionTitle" text="SERVICES PAGE" textAlignment="CENTER" wrappingWidth="854.0">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Text>
-         </children>
-      </HBox>
-      <GridPane>
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+<BorderPane fx:id="mainPane" prefHeight="673.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.ServiceControllerView">
+   <center>
+      <VBox prefWidth="602.0">
+         <HBox alignment="CENTER" prefHeight="55.0">
+            <children>
+               <Text fill="#f1c40f" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sectionTitle" text="SERVICES PAGE" textAlignment="CENTER">
+                  <font>
+                     <Font size="25.0" />
+                  </font>
+               </Text>
+            </children>
+         </HBox>
+         <GridPane>
+            <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
             <children>
                <Label text="Name:">
                   <opaqueInsets>
@@ -78,7 +78,7 @@
                      <Insets left="10.0" />
                   </padding>
                </Label>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="170.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                   <children>
                      <RadioButton fx:id="radioButtonBoth" minWidth="75.0" mnemonicParsing="false" selected="true" text="Both">
                         <toggleGroup>
@@ -88,49 +88,55 @@
                      <RadioButton fx:id="radioButtonYes" minWidth="75.0" mnemonicParsing="false" text="Yes" toggleGroup="$activeToggleGroup" />
                      <RadioButton fx:id="radioButtonNo" minWidth="75.0" mnemonicParsing="false" text="No" toggleGroup="$activeToggleGroup" />
                   </children>
+                  <padding>
+                     <Insets left="10.0" />
+                  </padding>
                </HBox>
                <TextField fx:id="nameInput" GridPane.rowIndex="1">
                   <GridPane.margin>
                      <Insets left="10.0" right="10.0" />
                   </GridPane.margin>
                </TextField>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <HBox alignment="CENTER" prefHeight="100.0" GridPane.rowIndex="3">
                   <children>
                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Min:">
                               <HBox.margin>
-                                 <Insets right="10.0" />
+                                 <Insets />
                               </HBox.margin>
                            </Text>
-                           <TextField fx:id="minPriceInput" prefHeight="25.0" prefWidth="90.0" />
+                           <TextField fx:id="minPriceInput" prefHeight="25.0" />
                         </children>
                      </HBox>
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <HBox alignment="CENTER" prefHeight="100.0">
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max:">
                               <HBox.margin>
-                                 <Insets right="10.0" />
+                                 <Insets />
                               </HBox.margin>
                            </Text>
-                           <TextField fx:id="maxPriceInput" prefHeight="25.0" prefWidth="90.0" />
+                           <TextField fx:id="maxPriceInput" prefHeight="25.0" />
                         </children>
                      </HBox>
                   </children>
                   <GridPane.margin>
                      <Insets />
                   </GridPane.margin>
+                  <padding>
+                     <Insets left="10.0" right="10.0" />
+                  </padding>
                </HBox>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <HBox alignment="CENTER" prefHeight="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <children>
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <HBox alignment="CENTER" prefHeight="100.0">
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Min:">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
                            </Text>
-                           <Spinner fx:id="durationMinInput" prefWidth="90.0" />
+                           <Spinner fx:id="durationMinInput" />
                         </children>
                      </HBox>
                      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -140,34 +146,40 @@
                                  <Insets right="10.0" />
                               </HBox.margin>
                            </Text>
-                           <Spinner fx:id="durationMaxInput" prefWidth="90.0" />
+                           <Spinner fx:id="durationMaxInput" />
                         </children>
                      </HBox>
                   </children>
+                  <padding>
+                     <Insets left="10.0" />
+                  </padding>
                </HBox>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <HBox alignment="CENTER" prefHeight="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                   <children>
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <HBox alignment="CENTER" prefHeight="100.0">
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Min:">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
                            </Text>
-                           <Spinner fx:id="maxParticipantsMinInput" prefWidth="90.0" />
+                           <Spinner fx:id="maxParticipantsMinInput" />
                         </children>
                      </HBox>
-                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <HBox alignment="CENTER" prefHeight="100.0">
                         <children>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Max:">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
                            </Text>
-                           <Spinner fx:id="maxParticipantsMaxInput" prefWidth="90.0" />
+                           <Spinner fx:id="maxParticipantsMaxInput" />
                         </children>
                      </HBox>
                   </children>
+                  <padding>
+                     <Insets left="10.0" />
+                  </padding>
                </HBox>
             </children>
             <VBox.margin>
@@ -176,7 +188,7 @@
             <padding>
                <Insets bottom="10.0" left="10.0" right="10.0" />
             </padding>
-      </GridPane>
+         </GridPane>
          <HBox alignment="CENTER" prefHeight="43.0" prefWidth="900.0" spacing="20.0">
             <children>
                <Button fx:id="buttonFilter" mnemonicParsing="false" onAction="#buttonFilterOnAction" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #f1c40f;" text="Filter" textFill="WHITE">
@@ -196,24 +208,25 @@
                   </font>
                   <cursor>
                      <Cursor fx:constant="HAND" />
-                  </cursor></Button>
+                  </cursor>
+               </Button>
             </children>
          </HBox>
          <TableView fx:id="serviceTable" prefHeight="320.0" prefWidth="880.0">
-           <columns>
-             <TableColumn fx:id="idColumn" prefWidth="110.0" text="Id" />
-             <TableColumn fx:id="nameColumn" prefWidth="110.0" text="Name" />
+            <columns>
+               <TableColumn fx:id="idColumn" prefWidth="110.0" text="Id" />
+               <TableColumn fx:id="nameColumn" prefWidth="110.0" text="Name" />
                <TableColumn fx:id="descriptionColumn" prefWidth="110.0" text="Description" />
                <TableColumn fx:id="priceColumn" prefWidth="110.0" text="Price" />
                <TableColumn fx:id="durationColumn" prefWidth="110.0" text="Duration" />
                <TableColumn fx:id="maxParticipantsColumn" prefWidth="110.0" text="Max Participants" />
                <TableColumn fx:id="activeColumn" prefWidth="110.0" text="Active" />
-           </columns>
+            </columns>
             <VBox.margin>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </VBox.margin>
          </TableView>
-         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0">
+         <HBox alignment="CENTER" prefHeight="38.0">
             <children>
                <Button fx:id="selectButton" mnemonicParsing="false" onAction="#selectButtonOnAction" style="-fx-background-color: #f1c40f;" text="Select" textFill="WHITE">
                   <font>
@@ -221,7 +234,8 @@
                   </font>
                   <cursor>
                      <Cursor fx:constant="HAND" />
-                  </cursor></Button>
+                  </cursor>
+               </Button>
                <Button fx:id="buttonNew" mnemonicParsing="false" onAction="#buttonNewOnAction" style="-fx-background-color: #f1c40f;" text="New" textFill="WHITE">
                   <HBox.margin>
                      <Insets left="10.0" right="10.0" />
@@ -257,6 +271,9 @@
                </Button>
             </children>
          </HBox>
-    </VBox>
-   </children>
-</StackPane>
+      </VBox>
+   </center>
+   <right>
+      <!-- aquí inyectaremos el reportView desde Java -->
+   </right>
+</BorderPane>

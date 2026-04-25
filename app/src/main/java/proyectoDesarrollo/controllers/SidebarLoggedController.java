@@ -98,11 +98,19 @@ public class SidebarLoggedController {
 
         // Inicial
         if (state.getCurrentUser() != null) {
+
             labelUser.setText(state.getCurrentUser().getUsername());
             labelRole.setText(state.getCurrentUser().getRole());
 
+            String photoBase64 = state.getCurrentUser().getImage();
+
             try {
-                imageViewUser.setImage(ImageToText.base64ToFxImage(state.getCurrentUser().getImage()));
+                if (photoBase64 != null && !photoBase64.isBlank()) {
+                    imageViewUser.setImage(ImageToText.base64ToFxImage(photoBase64));
+                } else {
+                    imageViewUser.setImage(
+                            new Image(getClass().getResource("/images/default_user.png").toExternalForm()));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,16 +119,6 @@ public class SidebarLoggedController {
             labelUser.setText("");
             labelRole.setText("");
         }
-
-        state.currentUserProperty().addListener((obs, oldUser, newUser) -> {
-            if (newUser != null) {
-                labelUser.setText(newUser.getUsername());
-                labelRole.setText(newUser.getRole());
-            } else {
-                labelUser.setText("");
-                labelRole.setText("");
-            }
-        });
 
         setActiveButton(profileButton);
     }

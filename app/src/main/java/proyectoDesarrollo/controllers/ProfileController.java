@@ -62,11 +62,16 @@ public class ProfileController {
         labelUser.setText(appState.getCurrentUser().getUsername());
         labelRole.setText(appState.getCurrentUser().getRole());
 
-            try {
+        try {
+            if (appState.getCurrentUser().getImage() != null && !appState.getCurrentUser().getImage().isBlank()) {
                 imageViewProfile.setImage(ImageToText.base64ToFxImage(appState.getCurrentUser().getImage()));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                imageViewProfile.setImage(
+                        new Image(getClass().getResource("/images/default_user_profile.png").toExternalForm()));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -80,7 +85,6 @@ public class ProfileController {
         String newUsername = usernameInput.getText().trim();
         String newPassword = newPasswordInput.getText().trim();
         String confirmPassword = confirmNewPasswordInput.getText().trim();
-
 
         boolean hasChanges = (!newUsername.isEmpty() && !newUsername.equals(currentUser.getUsername()))
                 || (!newPassword.isEmpty())

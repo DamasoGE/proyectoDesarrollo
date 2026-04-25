@@ -23,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -59,6 +60,8 @@ public class UserControllerView {
         }
     }
 
+    @FXML
+    private BorderPane mainPane;
     @FXML
     private TableColumn<User, String> addressColumn;
     @FXML
@@ -97,6 +100,19 @@ public class UserControllerView {
     private Button selectButton;
 
     public void initialize() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ReportPanel.fxml"));
+            Parent reportPanel = loader.load();
+
+            ReportPanelControllerView controller = loader.getController();
+            controller.setContext(ReportPanelControllerView.ReportContext.USERS);
+
+            mainPane.setRight(reportPanel);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         selectButton.setFocusTraversable(false);
         userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -314,39 +330,39 @@ public class UserControllerView {
     }
 
     private void exportTableToCSV() {
-    if (userTable.getItems().isEmpty()) {
-        System.out.println("No hay datos para exportar");
-        return;
-    }
+        if (userTable.getItems().isEmpty()) {
+            System.out.println("No hay datos para exportar");
+            return;
+        }
 
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Guardar CSV");
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-    File file = fileChooser.showSaveDialog(userTable.getScene().getWindow());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(userTable.getScene().getWindow());
 
-    if (file != null) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            // Cabecera
-            writer.write("ID,Username,Email,Role,Phone,Address");
-            writer.newLine();
-
-            // Filas
-            for (User user : userTable.getItems()) {
-                String line = String.format("%s,%s,%s,%s,%s,%s",
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getRole(),
-                        user.getPhone(),
-                        user.getAddress());
-                writer.write(line);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Cabecera
+                writer.write("ID,Username,Email,Role,Phone,Address");
                 writer.newLine();
-            }
 
-            System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
-        } catch (IOException ex) {
-            ex.printStackTrace();
+                // Filas
+                for (User user : userTable.getItems()) {
+                    String line = String.format("%s,%s,%s,%s,%s,%s",
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getRole(),
+                            user.getPhone(),
+                            user.getAddress());
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+                System.out.println("CSV exportado correctamente: " + file.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
 }

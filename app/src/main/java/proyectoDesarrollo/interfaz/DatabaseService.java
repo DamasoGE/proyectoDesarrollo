@@ -11,7 +11,7 @@ public class DatabaseService {
 
     private final String URL = "jdbc:mysql://localhost:3306/eventik?useSSL=false&serverTimezone=UTC";
     private final String USER = "admin";
-    private final String PASSWORD = "3YeL9k3yz80T";
+    private final String PASSWORD = "5Y0LO6VwWAaG";
 
     private DatabaseService() throws SQLException {
         try {
@@ -45,11 +45,6 @@ public class DatabaseService {
             e.printStackTrace();
         }
     }
-
-    
-
-    
-
 
 
     

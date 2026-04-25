@@ -10,14 +10,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="sidebarPane" maxHeight="720.0" maxWidth="275.0" minHeight="720.0" minWidth="275.0" prefHeight="720.0" prefWidth="275.0" style="-fx-background-color: #2F72A9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.SidebarLoggedController">
+<BorderPane fx:id="sidebarPane" maxHeight="720.0" maxWidth="275.0" minHeight="720.0" minWidth="200.0" prefHeight="720.0" prefWidth="200.0" style="-fx-background-color: #2F72A9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectoDesarrollo.controllers.SidebarLoggedController">
    <bottom>
       <Button fx:id="buttonExit" mnemonicParsing="false" onAction="#buttonExitOnAction" prefHeight="97.0" prefWidth="66.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
          <graphic>
-            <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="50.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/logout_icon.png" />
                </image>
@@ -77,17 +77,14 @@
       </VBox>
    </top>
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="275.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="290.0" prefWidth="200.0">
          <children>
-            <Button fx:id="usersButton" mnemonicParsing="false" onAction="#usersButtonOnAction" prefWidth="200.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Users" textFill="WHITE">
+            <Button fx:id="usersButton" mnemonicParsing="false" onAction="#usersButtonOnAction" prefHeight="65.0" prefWidth="175.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Users" textFill="WHITE">
                <font>
-                  <Font size="30.0" />
+                  <Font size="25.0" />
                </font>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -97,15 +94,12 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="servicesButton" mnemonicParsing="false" onAction="#servicesButtonOnAction" prefWidth="200.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Services" textFill="WHITE">
+            <Button fx:id="servicesButton" mnemonicParsing="false" onAction="#servicesButtonOnAction" prefHeight="65.0" prefWidth="175.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Services" textFill="WHITE">
                <font>
-                  <Font size="30.0" />
+                  <Font size="25.0" />
                </font>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -115,15 +109,12 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="ordersButton" mnemonicParsing="false" onAction="#ordersButtonOnAction" prefWidth="200.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Orders" textFill="WHITE">
+            <Button fx:id="ordersButton" mnemonicParsing="false" onAction="#ordersButtonOnAction" prefHeight="60.0" prefWidth="175.0" style="-fx-background-color: transparent;" styleClass="sectionButton" text=" Orders" textFill="WHITE">
                <font>
-                  <Font size="30.0" />
+                  <Font size="25.0" />
                </font>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-               </padding>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">

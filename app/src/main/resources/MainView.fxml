@@ -8,7 +8,7 @@
 
     <!-- Sidebar fija a la izquierda -->
     <left>
-        <VBox fx:id="sidebarContainer" prefHeight="720.0" prefWidth="272.0" style="-fx-background-color: #fff;" />
+        <VBox fx:id="sidebarContainer" prefHeight="720.0" prefWidth="200.0" style="-fx-background-color: #fff;" />
     </left>
 
     <!-- Zona central para las vistas -->

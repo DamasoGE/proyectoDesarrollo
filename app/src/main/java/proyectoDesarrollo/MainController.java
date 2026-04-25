@@ -1,16 +1,15 @@
 package proyectoDesarrollo;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import proyectoDesarrollo.controllers.SidebarLoggedController;
 import proyectoDesarrollo.utils.AppState;
-
-import java.io.IOException;
 
 public class MainController {
 
@@ -71,7 +70,6 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
             contentContainer.getChildren().setAll(view);
-            contentContainer.setAlignment(Pos.CENTER);
         } catch (IOException e) {
             e.printStackTrace();
         }

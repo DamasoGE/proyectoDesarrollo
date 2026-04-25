@@ -6,11 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+
 import javax.imageio.ImageIO;
+
 import javafx.embed.swing.SwingFXUtils;
-
-
-
 import javafx.scene.image.Image;
 
 public class ImageToText {
