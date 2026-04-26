@@ -1,0 +1,171 @@
+<project>
+    <shortName>Eventik</shortName>
+    <fullName>Eventik</fullName>
+    <version>1.0</version>
+    <logoImage>C:\Instalador\icon.png</logoImage>
+    <componentList>
+        <component name="default">
+            <description>Default Component</description>
+            <canBeEdited>1</canBeEdited>
+            <selected>1</selected>
+            <show>1</show>
+            <folderList>
+                <folder destination="${installdir}" name="programfiles">
+                    <description>Program Files</description>
+                    <platforms>all</platforms>
+                    <shortcutList>
+                        <shortcut>
+                            <comment>Uninstall</comment>
+                            <exec>${installdir}/${uninstallerName}</exec>
+                            <icon></icon>
+                            <name>Uninstall ${product_fullname}</name>
+                            <path>${installdir}</path>
+                            <platforms>all</platforms>
+                            <runAsAdmin>0</runAsAdmin>
+                            <runInTerminal>0</runInTerminal>
+                            <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                            <windowsExecArgs></windowsExecArgs>
+                            <windowsIcon></windowsIcon>
+                            <windowsPath>${installdir}</windowsPath>
+                        </shortcut>
+                    </shortcutList>
+                </folder>
+                <folder destination="${installdir}" name="programfileslinux">
+                    <description>Program Files</description>
+                    <platforms>linux</platforms>
+                </folder>
+                <folder destination="${installdir}" name="programfileslinux64">
+                    <description>Program Files</description>
+                    <platforms>linux-x64</platforms>
+                </folder>
+                <folder destination="${installdir}" name="programfileswindows">
+                    <description>Program Files</description>
+                    <platforms>windows</platforms>
+                    <distributionFileList>
+                        <distributionDirectory>
+                            <origin>C:/Instalador/lib</origin>
+                        </distributionDirectory>
+                        <distributionFile>
+                            <origin>C:/Instalador/app.jar</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>C:/Instalador/lanzaw.bat</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>C:/Instalador/icon.ico</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                    <shortcutList>
+                        <shortcut>
+                            <comment>Acceso a la app de Eventik</comment>
+                            <exec></exec>
+                            <icon></icon>
+                            <name>Eventik</name>
+                            <path></path>
+                            <platforms>windows</platforms>
+                            <runAsAdmin>0</runAsAdmin>
+                            <runInTerminal>0</runInTerminal>
+                            <windowsExec>${installdir}/lanzaw.bat</windowsExec>
+                            <windowsExecArgs></windowsExecArgs>
+                            <windowsIcon>${installdir}/icon.ico</windowsIcon>
+                            <windowsPath>${installdir}</windowsPath>
+                        </shortcut>
+                    </shortcutList>
+                </folder>
+                <folder destination="${installdir}" name="programfileswindows64">
+                    <description>Program Files</description>
+                    <platforms>windows-x64</platforms>
+                    <distributionFileList>
+                        <distributionDirectory>
+                            <origin>C:/Instalador/lib</origin>
+                        </distributionDirectory>
+                        <distributionFile>
+                            <origin>C:/Instalador/app.jar</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>C:/Instalador/icon.ico</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>C:/Instalador/lanza.bat</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>C:/Instalador/lanzaw.bat</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                    <shortcutList>
+                        <shortcut>
+                            <comment>Acceso a la app de Eventik</comment>
+                            <exec></exec>
+                            <icon></icon>
+                            <name>Eventik</name>
+                            <path></path>
+                            <platforms>all</platforms>
+                            <runAsAdmin>0</runAsAdmin>
+                            <runInTerminal>0</runInTerminal>
+                            <windowsExec>${installdir}/lanzaw.bat</windowsExec>
+                            <windowsExecArgs></windowsExecArgs>
+                            <windowsIcon>${installdir}/icon.ico</windowsIcon>
+                            <windowsPath>${installdir}</windowsPath>
+                        </shortcut>
+                    </shortcutList>
+                </folder>
+                <folder destination="${installdir}" name="programfileswindowsarm64">
+                    <description>Program Files</description>
+                    <platforms>windows-arm64</platforms>
+                </folder>
+                <folder destination="${installdir}" name="programfilesosx">
+                    <description>Program Files</description>
+                    <platforms>osx</platforms>
+                </folder>
+            </folderList>
+            <startMenuShortcutList>
+                <startMenuShortcut>
+                    <comment>Uninstall ${product_fullname}</comment>
+                    <name>Uninstall ${product_fullname}</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon></windowsIcon>
+                    <windowsPath>${installdir}/</windowsPath>
+                </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>Aplicación Eventik</comment>
+                    <name>Eventik</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/lanzaw.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/icon.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </startMenuShortcut>
+            </startMenuShortcutList>
+        </component>
+    </componentList>
+    <postInstallationActionList>
+        <setWindowsACL>
+            <action>allow</action>
+            <files>${installdir}</files>
+            <recurseObjects>1</recurseObjects>
+        </setWindowsACL>
+    </postInstallationActionList>
+    <enableRollback>0</enableRollback>
+    <enableTimestamp>1</enableTimestamp>
+    <vendor>DamasoGE</vendor>
+    <parameterList>
+        <directoryParameter>
+            <name>installdir</name>
+            <description>Installer.Parameter.installdir.description</description>
+            <explanation>Installer.Parameter.installdir.explanation</explanation>
+            <value></value>
+            <default>${platform_install_prefix}/${product_shortname}-${product_version}</default>
+            <allowEmptyValue>0</allowEmptyValue>
+            <ask>yes</ask>
+            <cliOptionName>prefix</cliOptionName>
+            <mustBeWritable>yes</mustBeWritable>
+            <mustExist>0</mustExist>
+            <width>40</width>
+        </directoryParameter>
+    </parameterList>
+</project>
+
